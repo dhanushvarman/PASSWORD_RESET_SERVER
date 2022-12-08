@@ -77,9 +77,8 @@ router.post("/reset-password/:id/:token", async (req, res, next) => {
             var salt = await bcrypt.genSalt(10);
             var hash = await bcrypt.hash(req.body.password, salt);
             req.body.password = hash;
-            await db.collection("users").updateOne({ _id: mongodb.ObjectId(id) }, { $set: { password: hash } })
-
-            res.render("index", { username: verify.username, status: "Verified" })
+            await db.collection("users").updateOne({ _id: mongodb.ObjectId(id) }, { $set: { password: hash } });
+            res.json({message : "Password Updated"})
         } else {
             res.status(401).json({ message: "Username not found" })
         }
